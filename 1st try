@@ -1,0 +1,25 @@
+from ultralytics import YOLO
+import numpy as np
+from PIL import Image
+import requests
+from io import BytesIO
+import cv2
+
+model = YOLO("/Users/silviasilva/PycharmProjects/pythonProject/Object_Recognition/Models/yolov8n.pt")
+
+print('Object recognition')
+
+user_pick = str(input('1 for image in URL or 2 for image in directory path: ')).strip()
+
+if user_pick == '1':
+    image_url = str(input('Image URL: ')).strip()
+    response = requests.get(image_url)
+    image = Image.open(BytesIO(response.content))
+    image = np.asarray(image)
+    results = model.predict(image)
+elif user_pick == '2':
+    image_path = str(input('Image directory path: ')).strip()
+    results = model.predict(source='{}'.format(image_path), conf=0.6, retina_masks=True)
+else:
+    print('Invalid choice. Please restart program')
+    quit()
