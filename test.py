@@ -8,14 +8,19 @@ from PIL import Image
 import requests
 # import methods to manipulate bytes data in memory
 from io import BytesIO
-# import library to perform image processing
-import cv2
-# import function to read an image from a file into an arry
-import matplotlib.pyplot as plt
+from roboflow import Roboflow
+
+# download and unzip Roboflow dataset
+rf = Roboflow(api_key="HAijjYs0jW2f55BBoIS0")
+project = rf.workspace("machine-learning-yfysx").project("machine-learning-mooc")
+dataset = project.version(1).download("yolov5")
 
 # save the model
 model = YOLO("yolov8n.pt")
 
+
+# results = model.train(data=data, epochs = 3)
+# prompt user
 user_pick = str(input('1 for image in URL or 2 for image in directory path: ')).strip()
 
 if user_pick == "1":
@@ -45,7 +50,7 @@ elif user_pick == "2":
 
     # predict the detected objects and output to the user
     results = model.predict(source='{}'.format(image_path), conf=confidence_level)
-    
+
 else: 
     print("Invalid choice. Please restart programme.")
     quit()
