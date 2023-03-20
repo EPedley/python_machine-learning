@@ -21,6 +21,11 @@ user_pick = str(input('1 for image in URL or 2 for image in directory path: ')).
 if user_pick == "1":
     # ask the user for the URL
     image_url = str(input('Image URL: ')).strip()
+
+     # ask the user for a confidence level
+    confidence = str(input('Confidence level: ')).strip()
+    confidence_level = float(confidence)
+
     # send a get request to the URL
     response = requests.get(image_url)
     # read and save image data
@@ -28,14 +33,19 @@ if user_pick == "1":
     # convert the image into an array
     image = np.asarray(image)
     # predict the detected objects and output to the user
-    results = model.predict(image)
+    results = model.predict(image, conf=confidence_level)
+
 elif user_pick == "2":
     # ask the user for the file directory
     image_path = str(input('Image directory path: ')).strip()
-    # convert the image into an array
-    image = plt.imread(image_path)
+
+    # ask the user for a confidence level
+    confidence = str(input('Confidence level: ')).strip()
+    confidence_level = float(confidence)
+
     # predict the detected objects and output to the user
-    results = model.predict(image)
+    results = model.predict(source='{}'.format(image_path), conf=confidence_level)
+    
 else: 
     print("Invalid choice. Please restart programme.")
     quit()
