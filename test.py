@@ -16,11 +16,26 @@ import matplotlib.pyplot as plt
 # save the model
 model = YOLO("yolov8n.pt")
 
-# ask the user for the file directory
-image_path = str(input('Image directory path: ')).strip()
+user_pick = str(input('1 for image in URL or 2 for image in directory path: ')).strip()
 
-# convert the image into an array
-image = plt.imread(image_path)
-
-# predict the detected objects and output to the user
-results = model.predict(image)
+if user_pick == "1":
+    # ask the user for the URL
+    image_url = str(input('Image URL: ')).strip()
+    # send a get request to the URL
+    response = requests.get(image_url)
+    # read and save image data
+    image = Image.open(BytesIO(response.content))
+    # convert the image into an array
+    image = np.asarray(image)
+    # predict the detected objects and output to the user
+    results = model.predict(image)
+elif user_pick == "2":
+    # ask the user for the file directory
+    image_path = str(input('Image directory path: ')).strip()
+    # convert the image into an array
+    image = plt.imread(image_path)
+    # predict the detected objects and output to the user
+    results = model.predict(image)
+else: 
+    print("Invalid choice. Please restart programme.")
+    quit()
