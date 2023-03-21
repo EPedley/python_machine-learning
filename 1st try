@@ -9,17 +9,12 @@ model = YOLO("/Users/silviasilva/PycharmProjects/pythonProject/Object_Recognitio
 
 print('Object recognition')
 
-user_pick = str(input('1 for image in URL or 2 for image in directory path: ')).strip()
+image_path = str(input("Image's URL or directory path: ")).strip()
 
-if user_pick == '1':
-    image_url = str(input('Image URL: ')).strip()
-    response = requests.get(image_url)
+if 'https://' in image_path or 'http://' in image_path:
+    response = requests.get(image_path)
     image = Image.open(BytesIO(response.content))
     image = np.asarray(image)
     results = model.predict(image)
-elif user_pick == '2':
-    image_path = str(input('Image directory path: ')).strip()
-    results = model.predict(source='{}'.format(image_path), conf=0.6, retina_masks=True)
 else:
-    print('Invalid choice. Please restart program')
-    quit()
+    results = model.predict(source='{}'.format(image_path), conf=0.6, retina_masks=True)
