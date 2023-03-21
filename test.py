@@ -8,18 +8,20 @@ from PIL import Image
 import requests
 # import methods to manipulate bytes data in memory
 from io import BytesIO
+# import custom dataset from Roboflow
 from roboflow import Roboflow
 
 # download and unzip Roboflow dataset
 rf = Roboflow(api_key="HAijjYs0jW2f55BBoIS0")
 project = rf.workspace("machine-learning-yfysx").project("machine-learning-mooc")
-dataset = project.version(1).download("yolov5")
+dataset = project.version(2).download("yolov8")
 
-# save the model
+# load the model
 model = YOLO("yolov8n.pt")
 
+# train the model using the Roboflow dataset
+results = model.train(data=dataset.location + "/data.yaml", epochs=25)
 
-# results = model.train(data=data, epochs = 3)
 # prompt user
 user_pick = str(input('1 for image in URL or 2 for image in directory path: ')).strip()
 
