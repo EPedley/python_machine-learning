@@ -14,13 +14,22 @@ from roboflow import Roboflow
 # download and unzip Roboflow dataset
 rf = Roboflow(api_key="HAijjYs0jW2f55BBoIS0")
 project = rf.workspace("machine-learning-yfysx").project("machine-learning-mooc")
-dataset = project.version(2).download("yolov8")
+dataset = project.version(3).download("yolov8")
 
-# load the model
-model = YOLO("yolov8n.pt")
+# load the standard model
+# model = YOLO("yolov8n.pt")
+
+# train the model using COCO
+# model.train(data='coco128.yaml', epochs=1)
+
+# load the custom-trained model
+# model = YOLO("runs/detect/train16/weights/best.pt")
 
 # train the model using the Roboflow dataset
-results = model.train(data=dataset.location + "/data.yaml", epochs=25)
+# results = model.train(data=dataset.location + "/data.yaml", epochs=100)
+
+# save trained model
+# success = model.export(format="onnx")
 
 # prompt user
 user_pick = str(input('1 for image in URL or 2 for image in directory path: ')).strip()
